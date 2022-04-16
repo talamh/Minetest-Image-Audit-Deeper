@@ -9,5 +9,10 @@ versions of interest, it only downloads version 1.8.9 by default
 
 list of all jars that can be downloaded is in the file available_jars.txt
 
+## requirements
+requests
 
+```bash
+$ pip install requests
+```
 
