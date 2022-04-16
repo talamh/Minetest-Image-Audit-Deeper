@@ -33,7 +33,7 @@ class LauncherMeta:
 
         for v in versions:
             self.version_urls[v['id']] = v['url']
-            print(f'{v["id"]}')
+            #print(f'{v["id"]}')
 
     def download(self):
         for v in self.selected_versions:
