@@ -1,7 +1,7 @@
 import urllib.request
 from io import BytesIO
 from json import loads, JSONDecodeError
-from os.path import exists
+from os.path import exists, getsize
 
 import requests
 
@@ -33,12 +33,14 @@ class LauncherMeta:
 
         for v in versions:
             self.version_urls[v['id']] = v['url']
-            #print(f'{v["id"]}')
+            # uncomment this to dump a list of all available jars to console
+            # print(f'{v["id"]}')
 
     def download(self):
         for v in self.selected_versions:
-            if not exists(f'./versions/{v}.jar'):
-                print(f'downloading version {v} = {self.selected_versions[v].size} bytes')
+            if not exists(f'./versions/{v}.jar') or getsize(f'./versions/{v}.jar') != self.selected_versions[v].size:
+                print(f'downloading version {v} = {self.selected_versions[v].size} bytes from:'
+                      f'\n{self.selected_versions[v].url}')
                 request = requests.get(self.selected_versions[v].url, stream=True)
 
                 if request.status_code == 200:
@@ -49,12 +51,10 @@ class LauncherMeta:
                 else:
                     print(f'could not download version {v}')
             else:
-                print(f'Version {v} already downloaded')
+                print(f'Version {v} already exists in the versions directory')
 
     def get_selected_urls(self, version_list: list) -> None:
         for v in version_list:
-            print(f'{v}')
-            print(f'{self.version_urls[v]}')
 
             with urllib.request.urlopen(self.version_urls[v]) as url:
                 try:
@@ -62,7 +62,7 @@ class LauncherMeta:
                     try:
                         self.selected_versions[v] = MCVersionV1(**data)
                         self.size += self.selected_versions[v].size
-                    except TypeError:
+                    except TypeError:  # minecraftArguments was changed to arguments at some point
                         self.selected_versions[v] = MCVersionV2(**data)
                         self.size += self.selected_versions[v].size
 

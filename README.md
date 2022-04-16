@@ -1,8 +1,9 @@
 # Minetest-Image-Audit-Deeper
 
-WIP: No actual auditing implemented.
+WIP: No actual auditing implemented yet.
 
-currently only downloads the jar files we will need:
+currently only downloads the jar files we will need, and indexes the contained
+image files into groups based on size.
 
 edit the list "check_against" in audit_deeper.py main() to select
 versions of interest, it only downloads version 1.8.9 by default
@@ -16,3 +17,8 @@ requests
 $ pip install requests
 ```
 
+PILLOW
+
+```bash
+$ pip install PILLOW
+```
